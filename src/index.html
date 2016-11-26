@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!--
+Copyright 2016 Richard Linsdale.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!-- ************************ IMPORTANT INFORMATION ************************************
+  This web navigation drawer template is provided as an example of how to configure
+  a JET web application with a navigation drawer as a single page application
+  using ojRouter and ojModule.  It contains the Oracle JET framework and a default
+  requireJS configuration file to show how JET can be setup in a common application.
+  This project template can be used in conjunction with demo code from the JET
+  website to test JET component behavior and interactions.
+
+  Any CSS styling with the prefix "demo-" is for demonstration only and is not
+  provided as part of the JET framework.
+
+  Please see the demos under Cookbook/Patterns/App Shell: Web and the CSS documentation
+  under Support/API Docs/Non-Component Styling on the JET website for more information on how to use 
+  the best practice patterns shown in this template.
+
+  Aria Landmark role attributes are added to the different sections of the application
+  for accessibility compliance. If you change the type of content for a specific
+  section from what is defined, you should also change the role value for that
+  section to represent the appropriate content type.
+  ***************************** IMPORTANT INFORMATION ************************************ -->
+<html lang="en-gb">
+    <head>
+        <title>Project Documentation</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="css/images/user.ico" type="image/x-icon" />
+
+        <!-- This is the main css file for the default Alta theme -->
+        <!-- injector:theme -->
+        <link rel="stylesheet" href="css/alta/2.1.0/web/alta.css" id="css"/>
+        <!-- endinjector -->
+
+        <!-- This contains icon fonts used by the starter template -->
+        <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css"/>
+
+        <!-- This is where you would add any app specific styling -->
+        <link rel="stylesheet" href="css/override.css" type="text/css"/>
+
+    </head>
+    <body class="oj-web-applayout-body">
+        <!-- Template for rendering navigation items shared between nav bar and nav list -->
+        <script type="text/html" id="navTemplate">
+          <li><a href="#">
+            <!-- ko text: $data['name'] --> <!--/ko-->
+          </a></li>
+        </script>
+        <!-- Template for rendering navigation items shared between doc nav bar and doc nav list -->
+        <script type="text/html" id="docnavTemplate">
+          <li><a href="#">
+            <span class="oj-navigationlist-item-icon demo-catalog-icon-24 demo-icon-font-24"></span>
+            <!-- ko text: $data['name'] --> <!--/ko-->
+          </a></li>
+        </script>
+
+        <div id="globalBody" class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
+            <!-- off canvas nav drawer  for project selection -->
+            <div id="navDrawer" class="oj-contrast-marker oj-web-applayout-offcanvas oj-offcanvas-start">
+                <div id="navoffcanvasmenu" role="navigation" data-bind="ojComponent: {component: 'ojNavigationList',
+                  navigationLevel: 'application',
+                  optionChange: navChange,
+                  item: {template: 'navTemplate'}, data: navdataSource,
+                  selection: router.stateId,
+                          edge: 'start',
+                  drillMode: 'collapsible'}">
+                </div>
+            </div>
+            <div id="pageContent" class="oj-web-applayout-page">
+                <!--
+                   ** Oracle JET V2.1.0 web application header pattern.
+                   ** Please see the demos under Cookbook/Patterns/App Shell: Web
+                   ** and the CSS documentation under Support/API Docs/Non-Component Styling
+                   ** on the JET website for more information on how to use this pattern.
+                -->
+                <header role="banner" class="oj-web-applayout-header">
+                    <div class="oj-web-applayout-max-width oj-flex-bar oj-sm-align-items-center">
+                        <!-- Offcanvas toggle button -->
+                        <div class="oj-flex-bar-start oj-md-hide">
+                            <button class="oj-button-lg" data-bind="click: toggleDrawer,
+                            ojComponent: {component:'ojButton', label: 'Project Selection',
+                            chroming: 'half', display: 'icons', icons: {start: 'oj-web-applayout-offcanvas-icon'}}">
+                            </button>
+                        </div>
+                        <div data-bind="css: smScreen() ? 'oj-flex-bar-center-absolute' : 'oj-flex-bar-middle oj-sm-align-items-baseline'">
+                            <h1 class="oj-web-applayout-header-title" title="Application Name" data-bind="text: appName"></h1>
+                        </div>
+                    </div>
+                </header>
+                <div class="oj-web-applayout-max-width oj-web-applayout-content">
+                    <div class="oj-flex">
+                        <div class="oj-xl-2 oj-lg-3 oj-md-4 oj-sm-only-hide oj-md-condense oj-md-justify-content-flex-end oj-flex">
+                            <div id="navmenu" role="navigation"
+                                 data-bind="ojComponent: {component: 'ojNavigationList',
+                            navigationLevel: 'application',
+                            item: {template: 'navTemplate'}, data: navdataSource,
+                            selection: router.stateId,
+                            edge: 'start'}"
+                                 class="oj-web-applayout-navbar oj-sm-only-hide oj-web-applayout-max-width oj-navigationlist-item-dividers oj-md-condense oj-md-justify-content-center oj-lg-justify-content-flex-end">
+                            </div>
+                        </div>
+                        <div class="oj-xl-10 oj-lg-9 oj-md-8 oj-sm-12 oj-flex" >
+                            <div class="oj-flex-item oj-flex" >
+                                <div id="docbody" class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
+                                    <div id="docdrawer" class="oj-contrast-marker oj-web-applayout-offcanvas oj-offcanvas-start">
+                                        <div id="docnavoffcanvasmenu" role="navigation" data-bind="ojComponent: {
+                                                component: 'ojNavigationList',
+                                                navigationLevel: 'application',
+                                                optionChange: docnavChange,
+                                                item: {template: 'docnavTemplate'}, data: docnavdataSource,
+                                                selection: docrouter().stateId,
+                                                edge: 'start',
+                                                drillMode: 'collapsible'}">
+                                        </div>
+                                    </div>
+                                    <div id="docpage" class ="oj-web-applayout-page">
+                                        <div class="oj-web-applayout-max-width oj-flex-bar oj-sm-align-items-center">
+                                            <!-- Offcanvas toggle button  -->
+                                            <div class="oj-flex-bar-start oj-md-hide">
+                                                <button class="oj-button-lg" data-bind="click: toggledocDrawer,
+                                                ojComponent: {component:'ojButton', label: 'Document Selection',
+                                                chroming: 'half', display: 'icons', icons: {start: 'demo-library-icon-24 demo-icon-font-24'}}"> 
+                                                </button>
+                                            </div>
+                                            <div class="oj-web-applayout-navbar oj-sm-only-hide oj-navigationlist-item-dividers oj-md-condense">
+                                                <div id="docnavmenu" role="navigation"
+                                                     data-bind="ojComponent: {component: 'ojNavigationList',
+                                                        navigationLevel: 'application',
+                                                        item: {template: 'docnavTemplate'}, data: docnavdataSource,
+                                                        selection: docrouter().stateId,
+                                                       edge: 'top'}" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="oj-flex-item">
+                                            <div class="oj-web-applayout-max-width oj-web-applayout-content" >
+                                                <div id="docContent" role="main" class="oj-flex-item oj-flex" 
+                                                     data-bind="ojModule: selectedView">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="oj-web-applayout-footer" role="contentinfo">
+                    <div class="oj-web-applayout-footer-item oj-web-applayout-max-width oj-text-secondary-color oj-text-sm">
+                        Copyright © 2014, 2016 Richard Linsdale All rights reserved.
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="js/libs/require/require.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+
+    </body>
+
+</html>

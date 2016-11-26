@@ -13,7 +13,7 @@ define(['ojs/ojcore', 'knockout', 'jquery'],
                 documents: {
                     'home': {name: 'Introduction'},
                     'user': {name: 'User Documentation'},
-                    'developer': {name: 'Developer Documentation'},
+                        'developer': {name: 'Developer Documentation'},
                     'install': {name: 'Installation Notes'},
                     'release': {name: 'Release Notes'},
                     'about': {name: 'About'}

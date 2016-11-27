@@ -51,9 +51,6 @@ define(['ojs/ojcore', 'knockout', 'config', 'ojs/ojrouter', 'ojs/ojknockout',
                     };
                     documentNavigationItems.push(dnobj);
                 });
-                if (documentNavigationItems.length < 2) {
-                    documentNavigationItems = [];
-                }
                 alldocnavItems[key] = documentNavigationItems;
             });
             // Document Router - create all the required child routers

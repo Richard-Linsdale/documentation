@@ -15,8 +15,4 @@
     
     <name>Documentation Viewer</name>
     
-    <properties>
-        <project_key>documentation</project_key>
-    </properties>
-    
 </project>
